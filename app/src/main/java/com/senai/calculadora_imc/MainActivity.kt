@@ -7,6 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 
+lateinit var nomeEditText: EditText
+lateinit var alturaEditText: EditText
+lateinit var pesoEditText: EditText
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,30 +20,57 @@ class MainActivity : AppCompatActivity() {
         val sair = findViewById<Button>(R.id.sair)
 
         calcular.setOnClickListener(){
-            val nome = findViewById<EditText>(R.id.nome).text
-            val altura = findViewById<EditText>(R.id.altura).text.toString().toDouble()
-            val peso = findViewById<EditText>(R.id.peso).text.toString().toInt()
-            val resultado = findViewById<TextView>(R.id.resultado)
-            val imc = peso / (altura * altura)
+            val nomeEditText = findViewById<EditText>(R.id.nome)
+            val alturaEditText = findViewById<EditText>(R.id.altura)
+            val pesoEditText = findViewById<EditText>(R.id.peso)
+            val resultadoTextView = findViewById<TextView>(R.id.resultado)
 
-            if ( imc < 18.5 ) {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)} \ne você está abaixo do peso."
-            } else if ( imc < 25 ) {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está no peso ideal. Parabéns!"
-            } else if ( imc < 30 ) {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está levemente acima do peso."
-            } else if ( imc < 35 ) {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau I."
-            } else if ( imc < 40 ) {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau II."
-            } else {
-                resultado.text = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau III. Cuidado!"
-                resultado.setTextColor(Color.BLACK)
+            if (validarCampos()) {
+                val nome = nomeEditText.text.toString()
+                val altura = alturaEditText.text.toString().toDouble()
+                val peso = pesoEditText.text.toString().toDouble()
+                var resultado = resultadoTextView.text
+
+                val imc = calcularImc(altura, peso)
+
+                if ( imc < 18.5 ) {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)} \ne você está abaixo do peso."
+                } else if ( imc < 25 ) {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está no peso ideal. Parabéns!"
+                } else if ( imc < 30 ) {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está levemente acima do peso."
+                } else if ( imc < 35 ) {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau I."
+                } else if ( imc < 40 ) {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau II."
+                } else {
+                    resultado = "$nome Seu imc é ${String.format("%.2f", imc)}  \ne você está com obesidade grau III. Cuidado!"
+
+                }
+
             }
+
         }
 
         sair.setOnClickListener(){
             finish()
         }
+    }
+
+    private fun validarCampos(): Boolean {
+        var noError = true
+        if (nomeEditText.text.isBlank()) {
+            nomeEditText.setError("Digite seu nome!")
+            noError = false
+        }
+        if (alturaEditText.text.isBlank()) {
+            alturaEditText.setError("Digite sua altura!")
+            noError = false
+        }
+        if (pesoEditText.text.isBlank()) {
+            pesoEditText.setError("Digite seu peso!")
+            noError = false
+        }
+        return noError
     }
 }

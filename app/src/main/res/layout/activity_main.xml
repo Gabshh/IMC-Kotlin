@@ -31,14 +31,14 @@
         android:id="@+id/altura"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="Qual sua altura?"
+        android:hint="Qual sua altura? (m)"
         android:inputType="numberDecimal"
         />
     <EditText
         android:id="@+id/peso"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="Qual seu peso?"
+        android:hint="Qual seu peso? (kg)"
         android:inputType="number"
         />
     <LinearLayout
